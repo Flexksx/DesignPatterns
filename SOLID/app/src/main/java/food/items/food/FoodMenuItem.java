@@ -1,6 +1,6 @@
 package food.items.food;
 
-import food.MenuItem;
+import food.items.MenuItem;
 import food.items.AbstractMenuItem;
 import food.recipes.Recipe;
 

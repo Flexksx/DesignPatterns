@@ -1,6 +1,6 @@
 package employees;
 
-import food.MenuItem;
+import food.items.MenuItem;
 
 public interface Employee {
     public String getName();

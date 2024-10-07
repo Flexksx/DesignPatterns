@@ -4,7 +4,6 @@ import java.time.Duration;
 
 import employees.Cook;
 import employees.Employee;
-import food.MenuItem;
 import food.ingredients.Ingredient;
 import food.ingredients.Lavash;
 import food.ingredients.Vegetable;
@@ -49,8 +48,8 @@ public class App {
 
     public static void CookKebab() {
         Recipe kebabRecipe = getKebabRecipe();
-        MenuItem kebab = new FoodMenuItem("Kebab", "Tender chicken kebab", 50, kebabRecipe, 420);
-        FoodMenuItem[] cookableItems = { (FoodMenuItem) kebab };
+        FoodMenuItem kebab = new FoodMenuItem("Kebab", "Tender chicken kebab", 50, kebabRecipe, 420);
+        FoodMenuItem[] cookableItems = { kebab };
         Employee john = new Cook("John", cookableItems);
         john.giveRequest(kebab);
         john.work();

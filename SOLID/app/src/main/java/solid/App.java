@@ -2,14 +2,16 @@ package solid;
 
 import java.time.Duration;
 import java.util.Set;
+import employees.producers.Barman;
 import employees.producers.Cook;
 import employees.Accountant;
-import employees.Employee;
 import food.ingredients.Ingredient;
 import food.ingredients.Lavash;
 import food.ingredients.Vegetable;
 import food.ingredients.meat.Meat;
 import food.ingredients.meat.enums.MeatType;
+import food.items.drinks.AlcoholicDrinkMenuItem;
+import food.items.drinks.DrinkMenuItem;
 import food.items.food.FoodMenuItem;
 import food.recipes.Recipe;
 import food.recipes.steps.OneTimeRecipeStep;
@@ -47,6 +49,10 @@ public class App {
         return kebabRecipe;
     }
 
+    public static DrinkMenuItem getJager() {
+        DrinkMenuItem jager = new AlcoholicDrinkMenuItem("Jager", "Jagermeister", 10, 40);
+    }
+
     public static void CookKebab() {
         Recipe kebabRecipe = getKebabRecipe();
         FoodMenuItem kebab = new FoodMenuItem("Kebab", "Tender chicken kebab", 50, kebabRecipe, 420);
@@ -55,6 +61,8 @@ public class App {
         john.giveRequest(kebab);
         john.giveRequest(kebab);
         john.work();
+        Barman nick = new Barman("Nick", 1000);
+        nick.giveRequest(kebab);
         Accountant accountant = new Accountant("Jane", 2000, null);
         accountant.addSubordinate(john);
         accountant.work();

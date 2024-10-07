@@ -14,9 +14,9 @@ public class Accountant implements Employee {
         this.name = name;
         this.salary = salary;
         if (subordinates == null) {
-            this.subordinates = new HashSet<>(); // Use HashSet to allow modifications
+            this.subordinates = new HashSet<>();
         } else {
-            this.subordinates = new HashSet<>(subordinates); // Make sure it's mutable
+            this.subordinates = new HashSet<>(subordinates);
         }
     }
 

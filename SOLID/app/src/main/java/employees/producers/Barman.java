@@ -9,15 +9,15 @@ public class Barman extends AbstractProducingEmployee implements Employee {
         super(name, salary);
     }
 
-
     @Override
     public void giveRequest(MenuItem menuItem) {
         if (menuItem == null) {
-            throw new IllegalArgumentException("Menu item cannot be null");
+            System.err.println("Menu item cannot be null");
         } else if (!(menuItem instanceof DrinkMenuItem)) {
-            throw new IllegalArgumentException("Barman can only serve drinks");
+            System.err.println("Barman can only serve drinks");
+        } else {
+            System.out.println("I'm a barman, I'm giving" + menuItem.getName());
         }
-        System.out.println("I'm a barman, I'm giving" + menuItem.getName());
     }
 
     @Override

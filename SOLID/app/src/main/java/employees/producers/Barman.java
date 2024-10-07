@@ -1,18 +1,14 @@
-package employees;
+package employees.producers;
 
+import employees.Employee;
 import food.items.MenuItem;
 import food.items.drinks.DrinkMenuItem;
 
-public class Barman implements Employee {
-    private String name;
-
-    public Barman(String name) {
-        this.name = name;
+public class Barman extends AbstractProducingEmployee implements Employee {
+    public Barman(String name, double salary) {
+        super(name, salary);
     }
 
-    public String getName() {
-        return name;
-    }
 
     @Override
     public void giveRequest(MenuItem menuItem) {

@@ -1,30 +1,24 @@
-package employees;
+package employees.producers;
 
 import food.items.food.FoodMenuItem;
 import food.items.MenuItem;
 import food.recipes.steps.RecipeStep;
 import food.recipes.steps.TimedRecipeStep;
-
 import java.util.LinkedList;
+import java.util.Set;
+
+import employees.Employee;
+
 import java.util.Queue;
 
-public class Cook implements Employee {
-    private String name;
-    private FoodMenuItem[] cookableItems;
+public class Cook extends AbstractProducingEmployee implements Employee {
+    private Set<FoodMenuItem> cookableItems;
     private Queue<FoodMenuItem> cookingQueue;
 
-    public Cook(String name, FoodMenuItem[] cookableItems) {
-        this.name = name;
+    public Cook(String name, double salary, Set<FoodMenuItem> cookableItems) {
+        super(name, salary);
         this.cookableItems = cookableItems;
         this.cookingQueue = new LinkedList<>();
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public FoodMenuItem[] canCook() {
-        return cookableItems;
     }
 
     @Override
@@ -34,14 +28,14 @@ public class Cook implements Employee {
         } else if (!(item instanceof FoodMenuItem)) {
             System.out.println("Cannot add non-food item to the queue.");
         } else {
-            System.out.println(item.getName() + " has been added to " + this.name + "'s cooking queue.");
+            System.out.println(item.getName() + " has been added to " + this.getName() + "'s cooking queue.");
             cookingQueue.add((FoodMenuItem) item);
         }
     }
 
     private void cookNextItem() {
         if (cookingQueue.isEmpty()) {
-            System.out.println(this.name + " has no items to cook.");
+            System.out.println(this.getName() + " has no items to cook.");
             return;
         }
 
@@ -56,9 +50,9 @@ public class Cook implements Employee {
             }
 
             if (!canCook) {
-                System.out.println(this.name + " cannot cook " + itemToCook.getName() + ".");
+                System.out.println(this.getName() + " cannot cook " + itemToCook.getName() + ".");
             } else {
-                System.out.println(this.name + " is cooking " + itemToCook.getName() + ".");
+                System.out.println(this.getName() + " is cooking " + itemToCook.getName() + ".");
                 RecipeStep[] steps = itemToCook.getRecipe().getSteps();
                 for (int i = 0; i < steps.length; i++) {
                     RecipeStep step = steps[i];

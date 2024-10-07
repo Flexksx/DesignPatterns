@@ -1,8 +1,9 @@
 package solid;
 
 import java.time.Duration;
-
-import employees.Cook;
+import java.util.Set;
+import employees.producers.Cook;
+import employees.Accountant;
 import employees.Employee;
 import food.ingredients.Ingredient;
 import food.ingredients.Lavash;
@@ -49,9 +50,13 @@ public class App {
     public static void CookKebab() {
         Recipe kebabRecipe = getKebabRecipe();
         FoodMenuItem kebab = new FoodMenuItem("Kebab", "Tender chicken kebab", 50, kebabRecipe, 420);
-        FoodMenuItem[] cookableItems = { kebab };
-        Employee john = new Cook("John", cookableItems);
+        Set<FoodMenuItem> cookableItems = Set.of(kebab);
+        Cook john = new Cook("John", 1000, cookableItems);
+        john.giveRequest(kebab);
         john.giveRequest(kebab);
         john.work();
+        Accountant accountant = new Accountant("Jane", 2000, null);
+        accountant.addSubordinate(john);
+        accountant.work();
     }
 }

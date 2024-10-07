@@ -8,4 +8,6 @@ public interface PaymentMethod {
     public String getProvider();
 
     public PaymentMethodType getType();
+
+    public boolean pay(double amount);
 }

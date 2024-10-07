@@ -3,12 +3,12 @@ package food.recipes.steps;
 import food.ingredients.Ingredient;
 import food.recipes.steps.enums.RecipeAction;
 
-public abstract class AbstractRecipeStep implements RecipeStep {
+public class OneTimeRecipeStep implements RecipeStep {
     protected Ingredient ingredient;
     protected String description;
     protected RecipeAction action;
 
-    public AbstractRecipeStep(Ingredient ingredient, String description, RecipeAction action) {
+    public OneTimeRecipeStep(Ingredient ingredient, String description, RecipeAction action) {
         this.ingredient = ingredient;
         this.description = description;
         this.action = action;

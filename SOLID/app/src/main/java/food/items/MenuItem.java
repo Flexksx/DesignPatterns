@@ -1,4 +1,4 @@
-package food;
+package food.items;
 
 public interface MenuItem {
     public String getName();

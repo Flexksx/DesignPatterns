@@ -1,7 +1,5 @@
 package food.items;
 
-import food.MenuItem;
-
 public abstract class AbstractMenuItem implements MenuItem {
     protected String name;
     protected String description;
@@ -27,5 +25,4 @@ public abstract class AbstractMenuItem implements MenuItem {
     public double getPrice() {
         return this.price;
     }
-
 }

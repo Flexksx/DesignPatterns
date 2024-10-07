@@ -9,6 +9,13 @@ public enum RecipeAction {
     GRILL("Grill"),
     ADD("Add"),
     REMOVE("Remove"),
+    CUT("Cut"),
+    FOLD("Fold"),
+    UNFOLD("Unfold"),
+    POUR("Pour"),
+    STIR("Stir"),
+    SHAKE("Shake"),
+    BLEND("Blend"),
     WAIT("Wait");
 
     private final String value;

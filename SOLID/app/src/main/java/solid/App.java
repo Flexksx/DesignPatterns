@@ -50,7 +50,8 @@ public class App {
     }
 
     public static DrinkMenuItem getJager() {
-        DrinkMenuItem jager = new AlcoholicDrinkMenuItem("Jager", "Jagermeister", 10, 40);
+        DrinkMenuItem jager = new AlcoholicDrinkMenuItem("Jagermeister", "German herbal liqueur", 25, 0.7, 40);
+        return jager;
     }
 
     public static void CookKebab() {
@@ -62,7 +63,9 @@ public class App {
         john.giveRequest(kebab);
         john.work();
         Barman nick = new Barman("Nick", 1000);
+        DrinkMenuItem jager = getJager();
         nick.giveRequest(kebab);
+        nick.giveRequest(jager);
         Accountant accountant = new Accountant("Jane", 2000, null);
         accountant.addSubordinate(john);
         accountant.work();

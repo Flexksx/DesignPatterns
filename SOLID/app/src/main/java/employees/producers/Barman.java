@@ -16,7 +16,7 @@ public class Barman extends AbstractProducingEmployee implements Employee {
         } else if (!(menuItem instanceof DrinkMenuItem)) {
             System.err.println("Barman can only serve drinks");
         } else {
-            System.out.println("I'm a barman, I'm giving" + menuItem.getName());
+            System.out.println("I'm a barman, I'm giving you some " + menuItem.getName());
         }
     }
 

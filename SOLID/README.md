@@ -152,4 +152,9 @@ public class AlcoholicDrinkMenuItem extends DrinkMenuItem {
 ```
 This demonstrates that our system is open for extension - new types of menu items can be added by creating other specialized classes starting from the `MenuItem` abstract class, or extend upon other already specialized classes, like the `DrinkMenuItem` and `AlcoholicDrinkMenuItem`.
 If we were to add a nullable `alcoholPercentage` field to the `DrinkMenuItem` class, we would jeopardize the flexibility of our system.
+
+### Liskov Substitution Principle
+
+
+
 ## Conclusions / Screenshots / Results

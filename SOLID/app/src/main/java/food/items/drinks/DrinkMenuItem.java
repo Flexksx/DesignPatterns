@@ -1,8 +1,8 @@
 package food.items.drinks;
 
-import food.items.AbstractMenuItem;
+import food.items.MenuItem;
 
-public class DrinkMenuItem extends AbstractMenuItem {
+public class DrinkMenuItem extends MenuItem {
     protected double volume;
 
     public DrinkMenuItem(String name, String description, double price, double volume) {

@@ -59,17 +59,97 @@ public class Barman extends AbstractProducingEmployee {
 This is a good example of SRP, since it focuses on the Barman's sole responsibility of serving drinks. It also adds a safety check and handles cases when a barman is asked to serve something other than a drink.
 
 ### Open-Closed Principle
-We may serve multiple dishes at a kebab place. All those are somewhat similar, so we can start with the most common thing. We can define an interface `MenuItem`
+We may serve multiple dishes at a kebab place. All those are somewhat similar, so we can start with the most common thing. We can define an abstract class `MenuItem`
 ```java
 package food.items;
 
-public interface MenuItem {
-    public String getName();
+public abstract class MenuItem {
+    protected String name;
+    protected String description;
+    protected double price;
 
-    public String getDescription();
+    public MenuItem(String name, String description, double price) {
+        this.name = name;
+        this.description = description;
+        this.price = price;
+    }
 
-    public double getPrice();
+    public String getDescription() {
+        return this.description;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public double getPrice() {
+        return this.price;
+    }
 }
 ```
+Then we can use that to define the `FoodMenuItem` class that specializes in representing different dishes on our menu.
+```java
+package food.items.food;
 
+import food.items.MenuItem;
+import food.recipes.Recipe;
+
+public class FoodMenuItem extends MenuItem {
+    protected Recipe recipe;
+    protected double weight;
+
+    public FoodMenuItem(String name, String description, double price, Recipe recipe, double weight) {
+        super(name, description, price);
+        this.recipe = recipe;
+        this.weight = weight;
+    }
+
+    public Recipe getRecipe() {
+        return this.recipe;
+    }
+
+    public double getWeight() {
+        return this.weight;
+    }
+}
+```
+and the `DrinkMenuItem` for items on our menu that are actually drinks.
+```java
+package food.items.drinks;
+
+import food.items.MenuItem;
+
+public class DrinkMenuItem extends MenuItem {
+    protected double volume;
+
+    public DrinkMenuItem(String name, String description, double price, double volume) {
+        super(name, description, price);
+        this.volume = volume;
+    }
+
+    public double getVolume() {
+        return this.volume;
+    }
+}
+```
+and we can go even further and extend a `DrinkMenuItem` to an `AlcoholicDrinkMenuItem`.
+```java
+package food.items.drinks;
+
+public class AlcoholicDrinkMenuItem extends DrinkMenuItem {
+    protected double alcoholPercentage;
+
+    public AlcoholicDrinkMenuItem(String name, String description, double price, double volume,
+            double alcoholPercentage) {
+        super(name, description, price, volume);
+        this.alcoholPercentage = alcoholPercentage;
+    }
+
+    public double getAlcoholPercentage() {
+        return this.alcoholPercentage;
+    }
+}
+```
+This demonstrates that our system is open for extension - new types of menu items can be added by creating other specialized classes starting from the `MenuItem` abstract class, or extend upon other already specialized classes, like the `DrinkMenuItem` and `AlcoholicDrinkMenuItem`.
+If we were to add a nullable `alcoholPercentage` field to the `DrinkMenuItem` class, we would jeopardize the flexibility of our system.
 ## Conclusions / Screenshots / Results

@@ -1,7 +1,7 @@
 package recipes;
 
 import java.time.Duration;
-import food.ingredients.Ingredient;
+import food.ingredients.AbstractIngredient;
 import food.ingredients.Lavash;
 import food.ingredients.Vegetable;
 import food.ingredients.meat.Meat;
@@ -18,11 +18,11 @@ import static org.junit.jupiter.api.Assertions.*;
 public class RecipeTest {
     @Test
     void KebabRecipe() {
-        Ingredient chicken = new Meat("Chicken Tighs", "Tender chicken tighs", MeatType.CHICKEN);
-        Ingredient toamtoes = new Vegetable("Tomato", "Fresh Tomatos", true);
-        Ingredient onions = new Vegetable("Onion", "Fresh Onions", true);
-        Ingredient bellPepper = new Vegetable("Bell Pepper", "Fresh Bell Pepper", true);
-        Ingredient lavash = new Lavash("Lavash", "Arabic lavash", false);
+        AbstractIngredient chicken = new Meat("Chicken Tighs", "Tender chicken tighs", MeatType.CHICKEN);
+        AbstractIngredient toamtoes = new Vegetable("Tomato", "Fresh Tomatos", true);
+        AbstractIngredient onions = new Vegetable("Onion", "Fresh Onions", true);
+        AbstractIngredient bellPepper = new Vegetable("Bell Pepper", "Fresh Bell Pepper", true);
+        AbstractIngredient lavash = new Lavash("Lavash", "Arabic lavash", false);
         RecipeStep grillChicken = new TimedRecipeStep(chicken, "Grill the chicken", RecipeAction.GRILL,
                 Duration.ofMinutes(1));
         RecipeStep cutTomatoes = new OneTimeRecipeStep(lavash, "Cut the tomatoes", RecipeAction.CUT);
@@ -30,7 +30,7 @@ public class RecipeTest {
         RecipeStep unfoldLavash = new OneTimeRecipeStep(lavash, "Unfold the lavash", RecipeAction.UNFOLD);
         RecipeStep mixIngredients = new OneTimeRecipeStep(lavash, "Mix the ingredients", RecipeAction.MIX);
         RecipeStep wrapIngredients = new OneTimeRecipeStep(lavash, "Wrap the ingredients", RecipeAction.FOLD);
-        Ingredient[] ingredients = { chicken, toamtoes, onions, bellPepper, lavash };
+        AbstractIngredient[] ingredients = { chicken, toamtoes, onions, bellPepper, lavash };
         RecipeStep[] steps = { grillChicken, cutTomatoes, cutOnions, unfoldLavash, mixIngredients, wrapIngredients };
         Recipe kebab = new Recipe("Kebab Recipe", ingredients, steps);
         System.out.println("You have successfully created a Kebab Recipe");

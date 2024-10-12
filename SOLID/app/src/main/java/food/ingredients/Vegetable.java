@@ -12,5 +12,4 @@ public class Vegetable extends AbstractIngredient {
     public boolean isOrganic() {
         return isOrganic;
     }
-
 }

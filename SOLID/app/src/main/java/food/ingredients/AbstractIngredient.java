@@ -1,6 +1,6 @@
 package food.ingredients;
 
-public abstract class AbstractIngredient implements Ingredient {
+public abstract class AbstractIngredient {
     private String name;
     private String description;
 

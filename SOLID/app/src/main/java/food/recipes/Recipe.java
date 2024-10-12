@@ -1,14 +1,14 @@
 package food.recipes;
 
-import food.ingredients.Ingredient;
+import food.ingredients.AbstractIngredient;
 import food.recipes.steps.RecipeStep;
 
 public class Recipe {
     private String name;
-    private Ingredient[] ingredients;
+    private AbstractIngredient[] ingredients;
     private RecipeStep[] steps;
 
-    public Recipe(String name, Ingredient[] ingredients, RecipeStep[] steps) {
+    public Recipe(String name, AbstractIngredient[] ingredients, RecipeStep[] steps) {
         this.name = name;
         this.ingredients = ingredients;
         this.steps = steps;
@@ -18,7 +18,7 @@ public class Recipe {
         return name;
     }
 
-    public Ingredient[] getIngredients() {
+    public AbstractIngredient[] getIngredients() {
         return ingredients;
     }
 

@@ -1,10 +1,9 @@
 package food.items.food;
 
 import food.items.MenuItem;
-import food.items.AbstractMenuItem;
 import food.recipes.Recipe;
 
-public class FoodMenuItem extends AbstractMenuItem implements MenuItem {
+public class FoodMenuItem extends MenuItem {
     protected Recipe recipe;
     protected double weight;
 

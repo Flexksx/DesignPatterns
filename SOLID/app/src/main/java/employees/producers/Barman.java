@@ -1,10 +1,9 @@
 package employees.producers;
 
-import employees.Employee;
 import food.items.MenuItem;
 import food.items.drinks.DrinkMenuItem;
 
-public class Barman extends AbstractProducingEmployee implements Employee {
+public class Barman extends AbstractProducingEmployee {
     public Barman(String name, double salary) {
         super(name, salary);
     }

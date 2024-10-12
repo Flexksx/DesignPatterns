@@ -7,11 +7,9 @@ import food.recipes.steps.TimedRecipeStep;
 import java.util.LinkedList;
 import java.util.Set;
 
-import employees.Employee;
-
 import java.util.Queue;
 
-public class Cook extends AbstractProducingEmployee implements Employee {
+public class Cook extends AbstractProducingEmployee {
     private Set<FoodMenuItem> cookableItems;
     private Queue<FoodMenuItem> cookingQueue;
 

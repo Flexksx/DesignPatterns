@@ -36,7 +36,6 @@ public class Cook extends AbstractProducingEmployee {
             System.out.println(this.getName() + " has no items to cook.");
             return;
         }
-
         FoodMenuItem itemToCook = cookingQueue.poll();
         if (itemToCook != null) {
             boolean canCook = false;
@@ -46,7 +45,6 @@ public class Cook extends AbstractProducingEmployee {
                     break;
                 }
             }
-
             if (!canCook) {
                 System.out.println(this.getName() + " cannot cook " + itemToCook.getName() + ".");
             } else {

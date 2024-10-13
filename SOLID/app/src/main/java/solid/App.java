@@ -2,9 +2,11 @@ package solid;
 
 import java.time.Duration;
 import java.util.Set;
+
+import employees.accountant.Accountant;
+import employees.director.Manager;
 import employees.producers.Barman;
 import employees.producers.Cook;
-import employees.Accountant;
 import food.ingredients.AbstractIngredient;
 import food.ingredients.Lavash;
 import food.ingredients.Vegetable;
@@ -58,16 +60,21 @@ public class App {
         Recipe kebabRecipe = getKebabRecipe();
         FoodMenuItem kebab = new FoodMenuItem("Kebab", "Tender chicken kebab", 50, kebabRecipe, 420);
         Set<FoodMenuItem> cookableItems = Set.of(kebab);
-        Cook john = new Cook("John", 1000, cookableItems);
-        john.giveRequest(kebab);
-        john.giveRequest(kebab);
-        john.work();
-        Barman nick = new Barman("Nick", 1000);
+        Cook cook = new Cook("John", 1000, cookableItems);
+        cook.giveRequest(kebab);
+        cook.giveRequest(kebab);
+        Barman barman = new Barman("Nick", 1000);
         DrinkMenuItem jager = getJager();
-        nick.giveRequest(kebab);
-        nick.giveRequest(jager);
+        barman.giveRequest(kebab);
+        barman.giveRequest(jager);
         Accountant accountant = new Accountant("Jane", 2000, null);
-        accountant.addSubordinate(john);
-        accountant.work();
+        accountant.subordinates.addSubordinate(cook);
+        Manager kitchenManager = new Manager("Jake", 1500, null);
+        Manager humanResourcesManager = new Manager("Alice", 1500, null);
+        kitchenManager.subordinatesManager.addSubordinate(cook);
+        kitchenManager.subordinatesManager.addSubordinate(barman);
+        humanResourcesManager.subordinatesManager.addSubordinate(accountant);
+        kitchenManager.work();
+        humanResourcesManager.work();
     }
 }

@@ -1,9 +1,8 @@
 package employees.producers;
 
-import employees.Employee;
 import food.items.MenuItem;
 
-public abstract class AbstractProducingEmployee implements Employee {
+public abstract class AbstractProducingEmployee implements ProducingEmployee {
     protected String name;
     protected double salary;
 

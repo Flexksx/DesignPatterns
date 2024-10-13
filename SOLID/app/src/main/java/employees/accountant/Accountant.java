@@ -37,7 +37,8 @@ public class Accountant implements Employee {
         for (Employee employee : this.subordinates.getSubordinates()) {
             paySalariesTo(employee);
         }
-        System.out.println("Paying myself $" + this.salary);
+        System.out.println("Paying myself, " + this.name
+                + " $" + this.salary);
     }
 
 }

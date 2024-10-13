@@ -29,7 +29,7 @@ public class App {
     public static void main(String[] args) {
         System.out.println(new App().getGreeting());
         getKebabRecipe();
-        CookKebab();
+        simulateRestaurant();
     }
 
     public static Recipe getKebabRecipe() {
@@ -56,15 +56,16 @@ public class App {
         return jager;
     }
 
-    public static void CookKebab() {
+    public static void simulateRestaurant() {
         Recipe kebabRecipe = getKebabRecipe();
-        FoodMenuItem kebab = new FoodMenuItem("Kebab", "Tender chicken kebab", 50, kebabRecipe, 420);
+        FoodMenuItem kebab = new FoodMenuItem("Kebab",
+                "Tender chicken kebab", 50, kebabRecipe, 420);
         Set<FoodMenuItem> cookableItems = Set.of(kebab);
+        DrinkMenuItem jager = getJager();
         Cook cook = new Cook("John", 1000, cookableItems);
         cook.giveRequest(kebab);
         cook.giveRequest(kebab);
         Barman barman = new Barman("Nick", 1000);
-        DrinkMenuItem jager = getJager();
         barman.giveRequest(kebab);
         barman.giveRequest(jager);
         Accountant accountant = new Accountant("Jane", 2000, null);

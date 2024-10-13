@@ -295,4 +295,68 @@ public class Accountant implements Employee {
 This implementation follows the Dependency Inversion Principle (DIP) by ensuring that Accountant depends on the Employee interface (an abstraction), not concrete classes. The SubordinatesManager handles operations on employees, keeping Accountant decoupled from low-level details. 
 This design allows for easy extension with new employee types, making the system flexible and maintaining adherence to the DIP by relying on abstractions rather than specific implementations.
 
-## Conclusions / Screenshots / Results
+
+## Results
+In the main class, define a method `simulateRestaurant()` like this:
+```java
+public static void simulateRestaurant() {
+        Recipe kebabRecipe = getKebabRecipe();
+        FoodMenuItem kebab = new FoodMenuItem("Kebab",
+                "Tender chicken kebab", 50, kebabRecipe, 420);
+        Set<FoodMenuItem> cookableItems = Set.of(kebab);
+        DrinkMenuItem jager = getJager();
+        Cook cook = new Cook("John", 1000, cookableItems);
+        cook.giveRequest(kebab);
+        cook.giveRequest(kebab);
+        Barman barman = new Barman("Nick", 1000);
+        barman.giveRequest(kebab);
+        barman.giveRequest(jager);
+        Accountant accountant = new Accountant("Jane", 2000, null);
+        accountant.subordinates.addSubordinate(cook);
+        Manager kitchenManager = new Manager("Jake", 1500, null);
+        Manager humanResourcesManager = new Manager("Alice", 1500, null);
+        kitchenManager.subordinatesManager.addSubordinate(cook);
+        kitchenManager.subordinatesManager.addSubordinate(barman);
+        humanResourcesManager.subordinatesManager.addSubordinate(accountant);
+        kitchenManager.work();
+        humanResourcesManager.work();
+    }
+```
+Where we instantiate some objects that will help showcasing the execution of the system. Using the `./gradlew run` command on Linux, we will see this output: 
+```
+Kebab has been added to John's cooking queue.
+Kebab has been added to John's cooking queue.
+Barman can only serve drinks
+I'm a barman, I'm giving you some Jagermeister
+Manager Jake is managing the team
+Manager Jake is now managing John
+John is cooking Kebab.
+Step 1: Grill the chicken for 60 seconds.
+Step 2: Cut the tomatoes
+Step 3: Cut the onions
+Step 4: Unfold the lavash
+Step 5: Mix the ingredients
+Step 6: Wrap the ingredients
+John is cooking Kebab.
+Step 1: Grill the chicken for 60 seconds.
+Step 2: Cut the tomatoes
+Step 3: Cut the onions
+Step 4: Unfold the lavash
+Step 5: Mix the ingredients
+Step 6: Wrap the ingredients
+Manager Jake is now managing Nick
+I'm a barman, I'm working
+Manager Alice is managing the team
+Manager Alice is now managing Jane
+I'm an accountant, I'm working
+Paying John $1000.0
+Paying myself, Jane $2000.0
+```
+
+# Conclusions
+In this lab work, we successfully implemented the SOLID principles in a restaurant simulation, demonstrating how these design guidelines can lead to cleaner, more maintainable, and flexible code. 
+By applying the Single Responsibility Principle, we ensured that each class has a distinct role, such as the Barman focusing solely on serving drinks. 
+The Open-Closed Principle allowed us to easily extend our menu system without modifying existing code, promoting scalability. 
+Additionally, the Liskov Substitution Principle enabled seamless interaction between various employee types, reinforcing the use of abstractions through the Employee interface. 
+The Interface Segregation Principle ensured that employees only implemented the methods necessary for their roles, while the Dependency Inversion Principle decoupled high-level components from low-level implementations, fostering flexibility and adaptability in our design. 
+Overall, this exercise highlighted the importance of adhering to SOLID principles in software development, ultimately leading to a robust and extensible architecture suitable for real-world applications.

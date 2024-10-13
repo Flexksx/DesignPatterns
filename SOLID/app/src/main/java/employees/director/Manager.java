@@ -31,7 +31,7 @@ public class Manager implements Employee {
                 + " is managing the team");
         for (Employee employee : this.subordinatesManager.getSubordinates()) {
             System.out.println("Manager " + this.name
-                    + " is managing " + employee.getName());
+                    + " is now managing " + employee.getName());
             employee.work();
         }
     }

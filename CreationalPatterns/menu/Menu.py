@@ -1,4 +1,4 @@
-from menu.menu_item.MenuItem import MenuItem
+from .MenuItem import MenuItem
 
 
 class Menu:

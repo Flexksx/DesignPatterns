@@ -361,6 +361,7 @@ Order of a Americano
 Medium Americano with Arabica beans - 2.99
 ```
 
+
 ## Conclusions
 In conclusion, this lab assignment not only allowed me to better understand the creational design patterns but also to see their practical value in real-world applications. 
 Through the careful implementation of these patterns, I was able to create a flexible, efficient, and scalable system that could accommodate both simple and complex coffee orders, while ensuring consistency and reusability of code. 

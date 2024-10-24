@@ -21,7 +21,7 @@ class Order:
 
     def __repr__(self) -> str:
         if self.is_basic:
-            return f"Just a simple {self.coffee_type}"
+            return f"Order of a {self.coffee_type}"
         else:
             size = f"{self.size}" if self.size is not None else ""
             toppings = f"{self.toppings}" if self.toppings is not None else ""

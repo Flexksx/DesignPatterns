@@ -1,4 +1,4 @@
-from coffee.CoffeeMenuItem import CoffeeMenuItem
+from coffee.Coffee import Coffee
 from coffee.ingredients.CoffeeBeans import CoffeeBeans
 from coffee.ingredients.MilkType import MilkType
 from coffee.ingredients.Topping import Topping
@@ -12,7 +12,7 @@ from coffee.Espresso import Espresso
 
 class CoffeeBuilder:
     def __init__(self) -> None:
-        self.modifiying_type: CoffeeMenuItem = None
+        self.modifiying_type: Coffee = None
         self.size = None
         self.beans = None
         self.milk = None
@@ -21,7 +21,7 @@ class CoffeeBuilder:
         self.price = None
         self.name = None
 
-    def from_type(self, coffee_type: CoffeeMenuItem):
+    def from_type(self, coffee_type: Coffee):
         self.modifiying_type = coffee_type
         self.size = self.modifiying_type.size
         self.beans = self.modifiying_type.beans
@@ -56,7 +56,7 @@ class CoffeeBuilder:
         return self
 
     def build(self):
-        return CoffeeMenuItem(
+        return Coffee(
             name=self.name,
             price=self.price,
             type=self.modifiying_type.coffee_type,

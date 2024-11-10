@@ -9,6 +9,8 @@ class CoffeeFactory:
         menu_items = menu.get_menu_items()
         self._coffee_types = {}
         for item in menu_items:
+            if not hasattr(item, 'coffee_type'):
+                continue
             item_coffee_type = item.coffee_type.value
             item_prototype = item
             self._coffee_types[item_coffee_type] = item_prototype

@@ -6,7 +6,7 @@ from coffee.ingredients.CoffeeBeans import CoffeeBeans
 from menu.MenuItem import MenuItem
 
 
-class CoffeeMenuItem(MenuItem):
+class Coffee(MenuItem):
     def __init__(self,
                  name: str = None,
                  price: float = None,
@@ -50,8 +50,10 @@ class CoffeeMenuItem(MenuItem):
 
     def __repr__(self) -> str:
         size = f"{self._size}" if self._size is not None else ""
-        toppings = f" and {self._toppings}" if self._toppings is not None else ""
+        toppings = f""" and {
+            self._toppings}""" if self._toppings is not None else ""
         beans = f"{self._beans}" if self._beans is not None else ""
-        milk = f" on {self._milk_type} milk {self._milk_quantity}" if self._milk_type is not None else ""
+        milk = f""" on {self._milk_type} milk {
+            self._milk_quantity}""" if self._milk_type is not None else ""
         return f"{size} {self._type} with {beans} beans{milk}{toppings} - {self._price}"
         # return f"A {self._size} {self._type} with {self._beans} beans, {self._milk_quantity}ml of {self._milk_type} milk and {self._toppings} - {self._price}"

@@ -1,10 +1,10 @@
 from coffee.enums.CoffeeSize import CoffeeSize
 from coffee.enums.DefaultCoffeeType import DefaultCoffeeType
-from coffee.CoffeeMenuItem import CoffeeMenuItem
+from coffee.Coffee import Coffee
 from coffee.ingredients.MilkType import MilkType
 
 
-class Latte(CoffeeMenuItem):
+class Latte(Coffee):
     def __init__(self):
         super().__init__(name="Latte",
                          price=2.99,

@@ -1,15 +1,20 @@
 from menu.MenuItem import MenuItem
-from .PastryType import PastryType
+from .enums.PastryType import PastryType
 
 
 class Pastry(MenuItem):
-    def __init__(self, name: str = None, price: float = None, pastry_type: PastryType = None, temperature: float = None) -> None:
+    def __init__(self, name: str = None, price: float = None, calories: float = None) -> None:
         super().__init__(name, price)
-        self.pastry_type = pastry_type
-        self.temperature = temperature
+        self.calories = calories
+
+    def get_calories(self) -> float:
+        return self.calories
 
     def __str__(self) -> str:
-        return f"""{self.pastry_type} - {self.temperature}°C"""
+        return f"{self.get_name()} - {self.get_price()}, {self.calories} calories"
 
     def __repr__(self) -> str:
+        return self.__str__()
+
+    def show(self) -> str:
         return self.__str__()

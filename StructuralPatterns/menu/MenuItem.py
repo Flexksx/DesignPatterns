@@ -1,21 +1,16 @@
-import copy
-
-
 class MenuItem():
     def __init__(self, name: str = None, price: float = None) -> None:
         self._name = name
         self._price = price
 
-    @property
-    def name(self):
+    def show(self):
         return self._name
 
-    @property
-    def price(self):
+    def get_price(self):
         return self._price
 
-    def clone(self):
-        return copy.deepcopy(self)
+    def get_name(self):
+        return self._name
 
     def __repr__(self) -> str:
         return f"{self._name} - {self._price}"

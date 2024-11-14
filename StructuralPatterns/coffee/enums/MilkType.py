@@ -2,11 +2,8 @@ from enum import Enum
 
 
 class MilkType(Enum):
-    WHOLE = "Whole"
-    SEMI_SKIMMED = "Semi-Skimmed"
-    SKIMMED = "Skimmed"
-    SOY = "Soy"
     ALMOND = "Almond"
+    REGULAR = "Regular"
 
     def __str__(self):
         return self.value

@@ -3,11 +3,7 @@ from enum import Enum
 
 class PastryType(Enum):
     CROISSANT = "Croissant"
-    BAGUETTE = "Baguette"
-    PAIN_CHOCOLAT = "Pain au chocolat"
-    PAIN_RAISIN = "Pain aux raisins"
-    ECLAIR = "Eclair"
-    MACARON = "Macaron"
+    PAIN_AU_CHOCOLAT = "Pain au Chocolat"
 
     def __str__(self):
         return self.value

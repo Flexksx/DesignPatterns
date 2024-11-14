@@ -1,59 +1,39 @@
-from coffee.enums.CoffeeSize import CoffeeSize
-from coffee.enums.DefaultCoffeeType import DefaultCoffeeType
-from coffee.ingredients.MilkType import MilkType
-from coffee.ingredients.Topping import Topping
-from coffee.ingredients.CoffeeBeans import CoffeeBeans
+from coffee.ingredients.bean.Bean import Bean
+from coffee.ingredients.milk.Milk import Milk
+from coffee.ingredients.syrup.Syrup import Syrup
 from menu.MenuItem import MenuItem
 
 
 class Coffee(MenuItem):
-    def __init__(self,
-                 name: str = None,
-                 price: float = None,
-                 type: DefaultCoffeeType = None,
-                 beans: CoffeeBeans = CoffeeBeans.ARABICA,
-                 toppings: Topping = None,
-                 milk_quantity: float = 0.0,
-                 milk_type: MilkType = None,
-                 size: CoffeeSize = None) -> None:
-        super().__init__(name, price)
-        self._type = type
-        self._beans = beans
-        self._milk_quantity = milk_quantity
-        self._milk_type = milk_type
-        self._size = size
-        self._toppings = toppings
+    def __init__(self, name: str = "Coffee", price: float = 1.0, milk: Milk = None, bean: Bean = None, syrup: Syrup = None) -> None:
+        self.base_price = price
+        self.milk = milk
+        self.bean = bean
+        self.syrup = syrup
+        super().__init__(name, self.get_price())
 
-    @property
-    def toppings(self):
-        return self._toppings
+    def get_price(self) -> float:
+        milk_cost = self.milk.get_cost() if self.milk else 0
+        bean_cost = self.bean.get_cost() if self.bean else 0
+        syrup_cost = self.syrup.get_cost() if self.syrup else 0
+        return milk_cost + bean_cost + syrup_cost + self.base_price
 
-    @property
-    def milk_type(self):
-        return self._milk_type
+    def get_milk(self) -> Milk:
+        return self.milk
 
-    @property
-    def coffee_type(self):
-        return self._type
+    def get_bean(self) -> Bean:
+        return self.bean
 
-    @property
-    def size(self):
-        return self._size
+    def get_syrup(self) -> Syrup:
+        return self.syrup
 
-    @property
-    def milk_quantity(self):
-        return self._milk_quantity
+    def __str__(self) -> str:
+        milk_str = f" with {self.milk}" if self.milk else ""
+        bean_str = f""" with {self.bean.get_name()}s from {
+            self.bean.get_origin_country()}""" if self.bean else ""
+        syrup_str = f""" with {self.syrup.get_flavour(
+        )} flavoured syrup """ if self.syrup else ""
+        return f"{self._name}{milk_str}{bean_str}{syrup_str} - {self.get_price()}"
 
-    @property
-    def beans(self):
-        return self._beans
-
-    def __repr__(self) -> str:
-        size = f"{self._size}" if self._size is not None else ""
-        toppings = f""" and {
-            self._toppings}""" if self._toppings is not None else ""
-        beans = f"{self._beans}" if self._beans is not None else ""
-        milk = f""" on {self._milk_type} milk {
-            self._milk_quantity}""" if self._milk_type is not None else ""
-        return f"{size} {self._type} with {beans} beans{milk}{toppings} - {self._price}"
-        # return f"A {self._size} {self._type} with {self._beans} beans, {self._milk_quantity}ml of {self._milk_type} milk and {self._toppings} - {self._price}"
+    def show(self):
+        return self.__str__()

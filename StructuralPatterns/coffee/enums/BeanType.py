@@ -1,12 +1,9 @@
 from enum import Enum
 
 
-class CoffeeBeans(Enum):
+class BeanType(Enum):
     ARABICA = "Arabica"
     ROBUSTA = "Robusta"
-    LIBERICA = "Liberica"
-    EXCELSA = "Excelsa"
-    STENOPHILLA = "Stenophylla"
 
     def __str__(self):
         return self.value

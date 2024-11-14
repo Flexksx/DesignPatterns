@@ -24,7 +24,7 @@ class Menu:
 
     def get_menu_item(self, menu_item_name: str = None):
         for item in self._menu_items:
-            if item.name == menu_item_name:
+            if item.show == menu_item_name:
                 return item
         print(f"Item {menu_item_name} not found in the menu.")
         return None

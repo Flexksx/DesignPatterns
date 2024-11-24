@@ -3,7 +3,7 @@ from order.Order import Order
 from pastry.Pastry import Pastry
 
 
-class OrderBuilder():
+class OrderBuilder:
     def __init__(self) -> None:
         self.order_items = []
 

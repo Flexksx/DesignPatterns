@@ -6,23 +6,20 @@ from employee.EmployeeState import EmployeeState
 class Employee(ABC):
     def __init__(self, name: str = None) -> None:
         self.name = name
-        self.possible_states: list[EmployeeState] = []
+        self.possible_states: dict[str, EmployeeState] = {}
         self.current_state = None
 
     def get_name(self) -> str:
         return self.name
 
-    @abstractmethod
-    def add_state(self, state: EmployeeState):
-        pass
+    def add_state(self, key: str = None, state: EmployeeState = None):
+        self.possible_states[key] = state
 
-    @abstractmethod
-    def set_state(self, state: EmployeeState):
-        pass
+    def set_state(self, key: str = None):
+        self.current_state = self.possible_states[key]
 
-    @abstractmethod
-    def get_state(self) -> EmployeeState:
-        pass
+    def get_current_state(self) -> EmployeeState:
+        return self.current_state
 
     @abstractmethod
     def handle_request(self, request: dict):

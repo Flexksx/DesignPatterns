@@ -19,7 +19,12 @@
         pkgs = nixpkgs.legacyPackages.${system};
       in
       {
-        devShells.default = pkgs.mkShell { buildInputs = [ pkgs.python311 ]; };
+        devShells.default = pkgs.mkShell {
+          buildInputs = [
+            pkgs.python311
+            pkgs.python311Packages.tqdm
+          ];
+        };
       }
     );
 }

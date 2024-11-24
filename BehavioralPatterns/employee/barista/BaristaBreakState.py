@@ -7,10 +7,7 @@ class BaristaBreakState(EmployeeState):
     def __init__(self) -> None:
         super().__init__()
         self.name = "Break"
-
-    def handle_request(self, request: dict):
-        if request["request"] == "order":
-            print("""
+        self.ascii_art = """
 ⣿⣿⣿⣿⣿⣿⣿⠿⠿⢛⣋⣙⣋⣩⣭⣭⣭⣭⣍⣉⡛⠻⢿⣿⣿⣿⣿
 ⣿⣿⣿⠟⣋⣥⣴⣾⣿⣿⣿⡆⣿⣿⣿⣿⣿⣿⡿⠟⠛⠗⢦⡙⢿⣿⣿
 ⣿⡟⡡⠾⠛⠻⢿⣿⣿⣿⡿⠃⣿⡿⣿⠿⠛⠉⠠⠴⢶⡜⣦⡀⡈⢿⣿
@@ -26,16 +23,21 @@ class BaristaBreakState(EmployeeState):
 ⣿⣿⣿⡿⢀⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣶⣤⡙⢿⢗⣀⣁⠈⢻⣿⣿
 ⣿⡿⢋⣴⣿⣎⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣦⡉⣯⣿⣷⠆⠙⢿
 ⣏⠀⠈⠧⢡⠉⠙⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠃⠉⢉⣁⣀⣀⣾          
-     """)
-            iterations = 100
-            duration = 2
-            interval = duration / iterations
+     """
 
-            for _ in tqdm(range(iterations), desc="Taking a Break", ncols=100):
-                time.sleep(interval)
+    def handle_request(self, request: dict):
+        print(self.ascii_art)
+        iterations = 100
+        duration = 2
+        interval = duration / iterations
 
-        else:
-            print("Barista is on break")
+        for _ in tqdm(
+            range(iterations),
+            desc="Taking a Break",
+            ncols=50,
+            bar_format="{l_bar}{bar}| {n_fmt}/{total_fmt}",
+        ):
+            time.sleep(interval)
 
     def __str__(self) -> str:
         return f"Barista state: {self.name}"

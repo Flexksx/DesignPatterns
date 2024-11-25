@@ -14,6 +14,10 @@ class CoffeeIngredientFlyweightFactory:
         self._ingredients = {}
 
     def get_ingredient(self, ingredient_type):
+        if ingredient_type is None:
+            return
+        if not isinstance(ingredient_type, (MilkType, BeanType, SyrupType)):
+            print("Invalid ingredient type")
         if ingredient_type not in self._ingredients:
             if ingredient_type == MilkType.ALMOND:
                 self._ingredients[ingredient_type] = AlmondMilk()
@@ -28,6 +32,6 @@ class CoffeeIngredientFlyweightFactory:
             elif ingredient_type == SyrupType.COCONUT:
                 self._ingredients[ingredient_type] = CoconutSyrup()
             else:
-                raise ValueError(f"Unknown ingredient type: {ingredient_type}")
+                print(f"Unknown ingredient type: {ingredient_type}")
 
         return self._ingredients[ingredient_type]

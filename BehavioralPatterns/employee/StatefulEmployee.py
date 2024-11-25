@@ -3,7 +3,7 @@ from abc import ABC, abstractmethod
 from employee.EmployeeState import EmployeeState
 
 
-class Employee(ABC):
+class StatefulEmployee(ABC):
     def __init__(self, name: str = None) -> None:
         self.name = name
         self.possible_states: dict[str, EmployeeState] = {}

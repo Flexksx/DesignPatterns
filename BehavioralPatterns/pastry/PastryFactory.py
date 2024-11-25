@@ -4,14 +4,15 @@ from pastry.Croissant import Croissant
 from pastry.PainAuChocolat import PainAuChocolat
 
 
-class PastryFactory():
+class PastryFactory:
     def __init__(self) -> None:
-        pass
+        self.pastry_types_hashmap = {
+            PastryType.CROISSANT: Croissant,
+            PastryType.PAIN_AU_CHOCOLAT: PainAuChocolat,
+        }
 
     def create_pastry(self, pastry_type: PastryType) -> Pastry:
-        if pastry_type == PastryType.CROISSANT:
-            return Croissant()
-        elif pastry_type == PastryType.PAIN_AU_CHOCOLAT:
-            return PainAuChocolat()
+        if pastry_type in self.pastry_types_hashmap:
+            return self.pastry_types_hashmap[pastry_type]()
         else:
-            raise ValueError(f"Invalid pastry type: {pastry_type}")
+            print(f"Invalid pastry type: {pastry_type}")

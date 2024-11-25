@@ -1,11 +1,10 @@
-from employee.Employee import Employee
-from employee.EmployeeState import EmployeeState
+from employee.StatefulEmployee import StatefulEmployee
 from employee.barista.BaristaBreakState import BaristaBreakState
 from employee.barista.BaristaReadyState import BaristaReadyState
 from employee.barista.BaristaContext import BaristaContext
 
 
-class Barista(Employee):
+class Barista(StatefulEmployee):
     def __init__(self, name: str = None) -> None:
         super().__init__(name)
         self._context = BaristaContext()

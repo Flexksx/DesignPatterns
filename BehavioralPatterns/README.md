@@ -7,223 +7,178 @@
 
 ## Objectives:
 
-* Study and understand Structural Design Patterns.
-* As a continuation of the previous laboratory work, think about the functionalities that your system will need to provide to the user.
-* Implement some additional functionalities usign Structural Design Patterns.
+* Study and understand Behavioral Design Patterns.
+* As a continuation of the previous laboratory work, think about what communication between software entities might be involed in your system.
+* Implement at least 1 Behavioral Design Pattern that extends the functionality of the system.
+* There should only be one client for the whole system.
+* The behavioral DPs can be integrated into you functionalities alongside the structural ones.
+
 ## Theoretical Background 
-In software engineering, the Structural Design Patterns are concerned with how classes and objects are composed to form larger structures. Structural class patterns use inheritance to create a hierarchy of classes/abstractions, but the structural object patterns use composition which is generally a more flexible alternative to inheritance.
+In software engineering, behavioral design patterns have the purpose of identifying common communication patterns between different software entities. By doing so, these patterns increase flexibility in carrying out this communication.
 
 ## Used Design Patterns: 
 
-* Decorator 
-* Bridge 
-* Composite 
-* Flyweight 
+* State 
 
 ## Implementation
-
-The previous version of the project focused more on Creational Design Patterns, that in some way allowed flexibility for creating coffee, but was not really the most scalable approach from a number of considerations. 
-The `Coffee` class did not allow for a great flexibility and representation of the objects it is made of, using fields like `milk_type` or `milk_volume` instead of encapsulating those in a `milk` attribute that can later be used.
-### Bridge - `Coffee`
-One may assume that a more suitable pattern for a `Coffee` class would be a composite, since it allows addign multiple components that implement the same interface. But actually coffee is mostly made out of 3 ingredients - `Beans`, `Milk` and `Topping` which has been changed to `Syrup` with seemingly no reason. 
-So it makes more sense to implement a bridge for these `CoffeeIngredients` rather than a composite, so that we can develop in the future the `Milk`, `Beans` and `Syrup` classes separately as abstractions and both implementations.
+Since this system focuses mostly on creating instances of items and managing resources and data, it may be hard to fit Behavioral patterns in an organic way. However, we may be creative about that and find some places we can improve the system.
+### State - `Barista`
+The barista class implements the `StatefulEmployee` class, which indicates that this abstract class makes use of different states to represent the behavior of an Employee.
 ```python
-class Coffee(MenuItem):
-    def __init__(self, name: str = "Coffee", price: float = 1.0, milk: Milk = None, bean: Bean = None, syrup: Syrup = None) -> None:
-        self.base_price = price
-        self.milk = milk
-        self.bean = bean
-        self.syrup = syrup
-        super().__init__(name, self.get_price())
-
-    def get_price(self) -> float:
-        milk_cost = self.milk.get_cost() if self.milk else 0
-        bean_cost = self.bean.get_cost() if self.bean else 0
-        syrup_cost = self.syrup.get_cost() if self.syrup else 0
-        return milk_cost + bean_cost + syrup_cost + self.base_price
-
-    <getters, base methods overrides>
+class Barista(StatefulEmployee):
+    def __init__(self, name: str = None) -> None:
+        super().__init__(name)
+        self._context = BaristaContext()
+        self.add_state(
+            key="ready", state=BaristaReadyState(barista_context=self._context)
+        )
+        self.add_state(key="break", state=BaristaBreakState())
+        self.set_ready_state()
 ```
-And from here we can work on the `Milk`, `Bean` and `Syrup` classes independently. We can create a `CoffeeIngredient` abstract class, which then will be derived into other specializations.
+We will also need a simple abstract class, named `EmployeeState`, that will serve as a contract of the methods for the states to implement.
 ```python
-class CoffeeIngredient(ABC):
+class EmployeeState(ABC):
     @abstractmethod
-    def get_cost(self):
-        pass
-
-    @abstractmethod
-    def get_name(self):
+    def handle_request(self, request):
         pass
 ```
-And we can add available ingredients using inheritance of the base ingredient class. By this approach, I have made available:
-* `Milk`
-  * `AlmondMilk`
-  * `RegularMilk`
-* `Bean`
-  * `RobustaBean`
-  * `ArabicaBean`
-* `Syrup`
-  * `CoconutSyrup`
-  * `VanillaSyrup`
+Which we can then derive into the classes
 
-Using the python **built-in** `enum` module, I have also added enumerations of the types of these ingredients, so that a client can select them without the need to call the base class, instead using a builder/factory by selecting the respective value from the enumerations.
-### Decorator - `TakeOutCoffee` and `OnThePlaceCoffee` 
-We can add bonus functionality to our coffee based on what serving mode does a client select. 
-We can start by declaring a base `CoffeeDecorator` class, and derive it and create the `TakeOutCoffeeDecorator` and `OnThePlaceCoffeeDecorator` classes and add modified behaviour for those. 
-The `TakeOutCoffeeDecorator` makes a coffee have a lid, that can be taken off or on
+#### [`BaristaReadyState`](https://github.com/Flexksx/Design-Patterns-Labs/blob/64362b0044129f5d990d709e425f6e4742e1a7d7/BehavioralPatterns/employee/barista/BaristaReadyState.py)
+Which will decode a dictionary and act as an adapter between a dictionary and the methods of the previously created `CoffeBuilder` class. It will also use the shared `BaristaContext` object to increment the fatigue of the `Barista`, which will trigger a state change in it.
 ```python
-class TakeOutCoffeeDecorator(CoffeeDecorator):
-    def __init__(self, coffee: Coffee = None) -> None:
-        super().__init__(coffee)
-        self.lid_on = True
-
-    def get_price(self) -> float:
-        return super().get_price()
-
-    def show(self):
-        return super().show() + " for take out."
-
-    def get_serving_instructions(self):
-        return "Take out"
-
-    def take_lid_off(self):
-        self.lid_on = False
-        print("Lid taken off")
-
-    def put_lid_on(self):
-        self.lid_on = True
-        print("Lid put on")
-```
-and the `OnThePlaceCoffeeDecorator` adds a nice foam art on the coffee.
-```python
-class OnThePlaceCoffeeDecorator(CoffeeDecorator):
-    def __init__(self, coffee: Coffee = None) -> None:
-        super().__init__(coffee)
-        self.foam_art = "Heart"
-
-    def get_price(self) -> float:
-        return super().get_price()
-
-    def get_serving_instructions(self):
-        return "On the place"
-
-    def __str__(self) -> str:
-        return super().__str__()
-
-    def show(self):
-        return super().show() + " with a foam art of a " + self.foam_art.lower()
-
-    def mix(self):
-        self.foam_art = "Mixed"
-        print("Foam art mixed")
-```
-The `CoffeeBuilder` class has also been modified with adding 2 new methods, that set a flag for the serving type and will return a decorated objects of the coffee.
-### Composite - `Order` 
-Since the coffee shop started serving pastry, and some users wanted to order multiple coffees at a time, there appeared the question of easing this process. We can implement an `Order` class that is a composite for the `MenuItem` class and stores the items made in the order:
-```python
-class Order(MenuItem):
-    def __init__(self, items: list[MenuItem] = []) -> None:
-        self.items = items
-        if len(items) == 0:
-            super().__init__("Order", 0)
+def handle_request(self, request: dict):
+        if request["request"] != "order":
+            print("Barista can only handle orders.")
+        if "coffee" not in request:
+            print("Barista needs a coffee order to proceed.")
         else:
-            super().__init__(self.get_name(), self.get_price())
-
-    def get_name(self):
-        return ', '.join(item.get_name() for item in self.items)
-
-    def add(self, item: MenuItem):
-        self.items.append(item)
-
-    def get_price(self) -> float:
-        print(self.items)
-        return sum(item.get_price() for item in self.items)
-
-    def get_items(self):
-        return self.items
-
-    def show(self) -> str:
-        return "\n".join(item.show() for item in self.items)
-
-    def __str__(self) -> str:
-        return f"Order: {self.get_name()} - {self.get_price()}"
+            if "milk" in request["coffee"]:
+                self._builder.with_milk(request["coffee"]["milk"])
+            if "bean" in request["coffee"]:
+                self._builder.with_bean(request["coffee"]["bean"])
+            if "syrup" in request["coffee"]:
+                self._builder.with_syrup(request["coffee"]["syrup"])
+            if "take_out" in request["coffee"]:
+                if request["coffee"]["take_out"]:
+                    self._builder.for_take_out()
+                else:
+                    self._builder.on_the_place()
+            coffee = self._builder.build()
+            print("Barista has made the coffee: " + coffee.show())
+            self._barista_context.increment_fatigue()
+            return coffee
 ```
-The `Order` class implements all methods of the base `MenuItem` class, and encapsulates and eases out the creation of orders that contain multiple items, and also counting the final bill for a client. 
-It is enough to call `get_price()` on an order now, rather than iterating multiple items and summing their `get_price()` methods. 
-And a user can also access individual items by using an index, calling `get_items()[i]`.
-### Flyweight - `CoffeeIngredientFlyweightFactory`
-Since we will need to create multiple coffees, it would be logical to store their ingredients in a cached way that will be more memory-efficient and will preserve the base attributes of the instantiated objects, while allowing to modify them in the future as separate instances.
+#### [`BaristaBreakState`](https://github.com/Flexksx/Design-Patterns-Labs/blob/64362b0044129f5d990d709e425f6e4742e1a7d7/BehavioralPatterns/employee/barista/BaristaBreakState.py)
+This class will make the user wait 2 seconds for the barista to have a break and print an ascii art and a progress bar for the time waiting. The barista will also not handle the request, since they're on a break.
 ```python
-class CoffeeIngredientFlyweightFactory:
-    def __init__(self):
-        self._ingredients = {}
+def handle_request(self, request: dict):
+        print(self.ascii_art)
+        iterations = 100
+        duration = 2
+        interval = duration / iterations
 
-    def get_ingredient(self, ingredient_type):
-        if ingredient_type not in self._ingredients:
-            if ingredient_type == MilkType.ALMOND:
-                self._ingredients[ingredient_type] = AlmondMilk()
-            elif ingredient_type == MilkType.REGULAR:
-                self._ingredients[ingredient_type] = RegularMilk()
-            elif ingredient_type == BeanType.ARABICA:
-                self._ingredients[ingredient_type] = ArabicaBean()
-            elif ingredient_type == BeanType.ROBUSTA:
-                self._ingredients[ingredient_type] = RobustaBean()
-            elif ingredient_type == SyrupType.VANILLA:
-                self._ingredients[ingredient_type] = VanillaSyrup()
-            elif ingredient_type == SyrupType.COCONUT:
-                self._ingredients[ingredient_type] = CoconutSyrup()
-            else:
-                raise ValueError(f"Unknown ingredient type: {ingredient_type}")
-
-        return self._ingredients[ingredient_type]
+        for _ in tqdm(
+            range(iterations),
+            desc="Taking a Break",
+            ncols=50,
+            bar_format="{l_bar}{bar}| {n_fmt}/{total_fmt}",
+        ):
+            time.sleep(interval)
 ``` 
-It stores the ingredients in a dictionary and implements lazy object creation, by creating objects only if those are absent and only when needed.
-Otherwise, it will return just the object that is already stored in its' memory.
-
-# Result, Usage Example
-We can create some coffee for take out using this:
+In the `Barista` class, the `handle_request` method will brew a coffee if the fatigue is less than 3, and then it will let the barista have a break, after which it will handle the request again.
 ```python
-coffee = CoffeeBuilder().with_milk(MilkType.ALMOND).with_bean(
-    BeanType.ARABICA).with_syrup(SyrupType.VANILLA).for_take_out().build()
-
-print(coffee.show())
+def handle_request(self, request: dict):
+        if self._context.get_fatigue() < 3:
+            return self.current_state.handle_request(request)
+        else:
+            self.set_break_state()
+            self.current_state.handle_request(request)
+            self.set_ready_state()
+            return self.handle_request(request)
 ```
-which will show:
-```
-Coffee with Almond Milk with Arabica Beans from Ethiopia with Vanilla flavoured syrup  - 3.25 with lid on
-```
-or another coffee to be served on the place
+### Single client implementation
+The structure of the client was inspired by the OpenAI python library, which encapsulates different parts of their API into clearly separated parts, and the developer accesses those as attributes and methods.
+In the same way, I have created the `CoffeeShopClient` class
 ```python
-another_coffee = CoffeeBuilder().with_milk(MilkType.REGULAR).with_bean(
-    BeanType.ROBUSTA).with_syrup(SyrupType.COCONUT).on_the_place().build()
-print(another_coffee.show())
+class CoffeeShopClient:
+    def __init__(self) -> None:
+        self._barista = Barista(name="John")
+        self.coffee = CoffeeClient(barista=self._barista)
+        self.pastry = PastryClient()
+        self.orders = OrderClient(coffee_client=self.coffee, pastry_client=self.pastry)
 ```
-which will show
-```
-Coffee with Regular Milk with Robusta Beans from Vietnam with Coconut flavoured syrup  - 2.75 with a foam art of a heart
-```
-And also create a composite order with some coffee and a croissant (this part was indented for readability, python does not allow such indentation)
-```python
-order = OrderBuilder().add_coffee(
-    CoffeeBuilder()
-        .with_milk(MilkType.ALMOND)
-        .with_bean(BeanType.ARABICA)
-        .with_syrup(SyrupType.VANILLA)
-        .build())
-    .add_pastry(
-    PastryFactory()
-        .create_pastry(pastry_type=PastryType.CROISSANT)
-    ).build()
+where the `PastryClient` and `CoffeeClient` have the responsibility of creating items at method call, and the `OrderClient` is responsible for initializing and modifying (adding items) to existing `Order` objects.
 
+## Result
+We have to initialize the client with
+```python
+api = CoffeeShopClient()
+```
+after which we can call it's submodules, like for making a coffee
+```python
+coffee = api.coffee.make(
+    milk=MilkType.REGULAR, bean=BeanType.ARABICA, syrup=SyrupType.VANILLA, take_out=True
+)
+```
+Or we can create an order and add some coffees and deserts to it
+```python
+order = api.orders.new()
+
+order = api.orders.add_coffee(
+    order=order,
+    milk=MilkType.REGULAR,
+    bean=BeanType.ARABICA,
+    syrup=SyrupType.VANILLA,
+    to_go=True,
+)
+
+order = api.orders.add_pastry(order=order, pastry_type=PastryType.CROISSANT)
+order = api.orders.add_pastry(order=order, pastry_type=PastryType.PAIN_AU_CHOCOLAT)
+order = api.orders.add_coffee(
+    order=order,
+    milk=MilkType.REGULAR,
+    bean=BeanType.ARABICA,
+    syrup=SyrupType.VANILLA,
+    to_go=True,
+)
+order = api.orders.add_coffee(order=order, bean=BeanType.ROBUSTA)
 print(order.show())
 ```
-which will show the expected:
+Which show the following output
 ```
-Coffee with Almond Milk with Arabica Beans from Ethiopia with Vanilla flavoured syrup  - 3.25
+Barista has made the coffee: Coffee with Regular Milk with Arabica Beans from Ethiopia with Vanilla flavoured syrup  - 3.0 with lid on
+Barista has made the coffee: Coffee with Regular Milk with Arabica Beans from Ethiopia with Vanilla flavoured syrup  - 3.0 with lid on
+Added coffee to order
+Added pastry to order
+Added pastry to order
+Barista has made the coffee: Coffee with Regular Milk with Arabica Beans from Ethiopia with Vanilla flavoured syrup  - 3.0 with lid on
+Added coffee to order
+⣿⣿⣿⣿⣿⣿⣿⠿⠿⢛⣋⣙⣋⣩⣭⣭⣭⣭⣍⣉⡛⠻⢿⣿⣿⣿⣿
+⣿⣿⣿⠟⣋⣥⣴⣾⣿⣿⣿⡆⣿⣿⣿⣿⣿⣿⡿⠟⠛⠗⢦⡙⢿⣿⣿
+⣿⡟⡡⠾⠛⠻⢿⣿⣿⣿⡿⠃⣿⡿⣿⠿⠛⠉⠠⠴⢶⡜⣦⡀⡈⢿⣿
+⡿⢀⣰⡏⣼⠋⠁⢲⡌⢤⣠⣾⣷⡄⢄⠠⡶⣾⡀⠀⣸⡷⢸⡷⢹⠈⣿
+⡇⢘⢿⣇⢻⣤⣠⡼⢃⣤⣾⣿⣿⣿⢌⣷⣅⡘⠻⠿⢛⣡⣿⠀⣾⢠⣿
+⣷⠸⣮⣿⣷⣨⣥⣶⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡟⢁⡼⠃⣼⣿  BRO GIMME A BREAK
+⣿⡆⢻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⢃⡞⣱⠆⣿⣿
+⣿⣿⠈⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠁⣼⢸⡿⢸⣿⣿
+⣿⣿⡇⢹⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡇⢿⡌⠃⣿⣿⣿
+⣿⣿⣿⠘⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⢻⣿⣿⣷⢸⣷⠀⣿⣿⣿
+⣿⣿⣿⡇⢻⣿⣿⣿⡿⠿⠿⣿⣿⣿⠿⠟⣡⡈⠻⣿⣿⣿⣿⢠⣿⣿⣿
+⣿⣿⣿⣿⠘⣿⣿⣿⣿⣦⣙⣛⣛⣛⣋⠷⠙⢿⣷⣌⠛⢿⡇⣼⣿⣿⣿
+⣿⣿⣿⡿⢀⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣶⣤⡙⢿⢗⣀⣁⠈⢻⣿⣿
+⣿⡿⢋⣴⣿⣎⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣦⡉⣯⣿⣷⠆⠙⢿
+⣏⠀⠈⠧⢡⠉⠙⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠃⠉⢉⣁⣀⣀⣾          
+Taking a Break: 100%|████████████████████| 100/100
+Barista has made the coffee: Coffee with Robusta Beans from Vietnam - 1.75 with lid on
+Added coffee to order
+Coffee with Regular Milk with Arabica Beans from Ethiopia with Vanilla flavoured syrup  - 3.0 with lid on
 Croissant - 4.5, 230 calories
+Pain au chocolat - 3.5, 300 calories
+Coffee with Regular Milk with Arabica Beans from Ethiopia with Vanilla flavoured syrup  - 3.0 with lid on
+Coffee with Robusta Beans from Vietnam - 1.75 with lid on
 ```
 # Conclusions
-This lab was highly beneficial in exploring the practical applications of structural design patterns, which are essential in organizing and managing complex object compositions. 
-By implementing patterns like Decorator, Bridge, Composite, and Flyweight, we were able to create a more flexible and scalable system for building coffee products and orders. 
-These patterns allow for increased modularity, reducing code duplication and promoting reusability while enhancing flexibility in ingredient representation, customization, and order management. 
-Structural design patterns prove valuable in developing systems that require combining multiple elements seamlessly, ensuring efficiency and adaptability in larger-scale applications.
+This laboratory work focused on implementing the State design pattern for the `Barista` class, which also allows us in the future to add other `StatefulEmployees` by deriving the respective abstract class. The State pattern also allows the developers to add other states for the employee or modifying the behaviour of concrete states in the future.
+This assignment also emphasizes on the importance of using behavioral patterns of different types to achieve good results in terms of extendability of the project and the robustness of a system. 
+By creating a well-structured project from the start, it is very easy to implement new features without the need to add breaking changes and avoiding smelly code.

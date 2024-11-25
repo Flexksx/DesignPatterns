@@ -1,4 +1,5 @@
-from api.coffee.CoffeeAPI import CoffeeAPI
+from api.coffee.CoffeeClient import CoffeeClient
+from api.pastry.PastryClient import PastryClient
 from coffee.Coffee import Coffee
 from coffee.enums.BeanType import BeanType
 from coffee.enums.MilkType import MilkType
@@ -7,9 +8,12 @@ from order.Order import Order
 from pastry.enums.PastryType import PastryType
 
 
-class OrderAPI:
-    def __init__(self, coffee_api: CoffeeAPI) -> None:
-        self.coffee_api = coffee_api
+class OrderClient:
+    def __init__(
+        self, coffee_client: CoffeeClient, pastry_client: PastryClient
+    ) -> None:
+        self._coffee_client = coffee_client
+        self._pastry_client = pastry_client
 
     def new(self) -> Order:
         return Order()
@@ -25,14 +29,18 @@ class OrderAPI:
         if order is None:
             print("It is required to have an order to add a coffee item")
         else:
-            coffee = self.coffee_api.make(
+            coffee = self._coffee_client.make(
                 milk=milk, bean=bean, syrup=syrup, take_out=to_go
             )
             order.add(coffee)
+            print("Added coffee to order")
             return order
 
     def add_pastry(self, order: Order = None, pastry_type: PastryType = None) -> Order:
         if order is None:
             print("It is required to have an order to add a pastry item")
-        if pastry_type is None:
-            print("It is required to specify a pastry type")
+        else:
+            pastry = self._pastry_client.make(pastry_type)
+            order.add(pastry)
+            print("Added pastry to order")
+            return order

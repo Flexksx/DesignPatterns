@@ -1,11 +1,10 @@
-from coffee.creators.builder.CoffeeBuilder import CoffeeBuilder
 from coffee.enums.BeanType import BeanType
 from coffee.enums.MilkType import MilkType
 from coffee.enums.SyrupType import SyrupType
 from employee.barista.Barista import Barista
 
 
-class CoffeeAPI:
+class CoffeeClient:
     def __init__(self, barista: Barista) -> None:
         self._barista = barista
 
